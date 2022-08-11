@@ -39,8 +39,8 @@
     "events": [],
     "functions": [
         {
-            "label": "ping",
-            "name": "_ping"
+            "label": "Make Coffee",
+            "name": "_makeCoffee"
         }
     ],
     "scripts":[
