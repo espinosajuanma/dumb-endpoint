@@ -1,0 +1,26 @@
+{
+  "name": "dumb-endpoint",
+  "version": "1.0.0",
+  "description": "A dumb Slingr endpoint that does nothing",
+  "main": "endpoint.js",
+  "scripts": {
+    "start": "node endpoint.js",
+    "startDev": "nodemon endpoint.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/espinosajuanma/dumb-endpoint"
+  },
+  "keywords": [
+    "slingr",
+    "dumb",
+    "endpoints"
+  ],
+  "dependencies": {
+    "slingr-endpoints": "^1.4.4"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
