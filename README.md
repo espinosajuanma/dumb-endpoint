@@ -11,6 +11,10 @@ summary: "Just a dumb Slingr Endpoint intended for learning purposes"
 This repository is a educational intended for write a Slingr NodeJS from
 scratch.
 
+For further information and updates please read the [official Slingr
+documentation](https://platform-docs.slingr.io/extensions_node_sdk.html)
+about NodeJS Endpoints Framework.
+
 ## Scope
 
 This is a limited tutorial. We are not going to see the whole of the
