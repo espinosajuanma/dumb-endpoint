@@ -1,9 +1,11 @@
-# Branch `005`
+# Branch `006`
 
-## What is going on here
+## Welcome to the internet
 
-```js
-endpoint.events.send('eventName', {});
+We are going to make our first HTTP Request to an external service.
 
-let info = await endpoint.events.sendSync('eventName', {});
-```
+We need to make an [xkcd](https://xkcd.com) to get info about the comic
+of the day or an specific comic.
+
+For this we are going to use the `endpoint.httpModule` library. Which is
+just an `axios` instance.

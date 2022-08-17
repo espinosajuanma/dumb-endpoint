@@ -1,17 +1,19 @@
 const endpoint = require('slingr-endpoints');
 
+const URL = 'https://xkcd.com/info.{number}.json'
+
 endpoint.hooks.onEndpointStart = async () => {
     endpoint.logger.info('Endpoint started');
+}
 
-    setTimeout(() => {
-      endpoint.events.send('profile', {
-        time: new Date().getTime(),
-        memoryUsage: process.memoryUsage
-      });
-    }, 15000);
+endpoint.functions._getComic = async ({ params }) => {
+  let number = params.number ?? 0;
+  let url = URL.replace('{number}', number)
 
-    let info = await endpoint.events.sendSync('getInfo', {});
-    endpoint.appLogger.info('Got info from app', info);
+  endpoint.appLogger.info(`Making HTTP GET request to [${url}]`)
+
+  let { data } = await endpoint.httpModule.get(url);
+  return data;
 }
 
 endpoint.start();

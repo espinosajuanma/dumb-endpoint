@@ -36,19 +36,14 @@
     },
     "status": "ACTIVE",
     "stores": [],
-    "events": [
+    "events": [],
+    "functions": [
         {
-            "label": "Profile Endpoint",
-            "name": "profile",
-            "description": "Send report every X seconds about the memory usage"
-        },
-        {
-            "label": "Get Info From Endpoint",
-            "name": "getInfo",
-            "description": "Send an event to get info from the app"
+            "label": "Get Comic",
+            "name": "_getComic",
+            "description": "Get an XKCD comic"
         }
     ],
-    "functions": [],
     "scripts":[
         "helpers.js"
     ],
