@@ -17,7 +17,10 @@ function getResponse (sender, receiver, message, callId) {
 }
 
 endpoint.functions._leaveMessage = ({ params, id, userEmail }) => {
-  getResponse(userEmail, params.receiver, params.message);
+  if (!params.receiver || !params.message) {
+    throw 'Reicever and Message can\'t be empty';
+  }
+  getResponse(userEmail, params.receiver, params.message, id);
   return { sent: true };
 }
 

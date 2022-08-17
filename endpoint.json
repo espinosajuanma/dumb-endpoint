@@ -38,23 +38,22 @@
     "stores": [],
     "events": [
         {
-          "label": "Message Received",
-          "name": "messageReceived",
-          "description": "Send an event when receiver respond a message"
+            "label": "Message Received",
+            "name": "messageReceived",
+            "description": "Callback from Leave Message function"
         }
     ],
     "functions": [
         {
-          "label": "Leave Message",
-          "name:": "_leaveMessage",
-          "description": "Leave an inbox message and send response callback",
-          "callbacks": [
-            {
-              "name": "messageReceived",
-              "maxWaitingTime": 300000,
-              "maxExpectedResponses": 1
-            }
-          ]
+            "label": "Leave Message",
+            "name": "_leaveMessage",
+            "callbacks": [
+                {
+                    "name": "messageReceived",
+                    "maxWaitingTime": 300000,
+                    "maxExpectedResponses": 1
+                }
+            ]
         }
     ],
     "scripts":[

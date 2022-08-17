@@ -23,25 +23,24 @@ listen when our friend read and send us the response back.
 ```json
 {
   "events": [
-    {
-      "label": "Message Received",
-      "name": "messageReceived",
-      "description": "Send an event when receiver respond a message"
-    }
-  ]
-  "functions": [
-    {
-      "label": "Leave Message",
-      "name:": "_leaveMessage",
-      "description": "Leave an inbox message and send response callback",
-      "callbacks": [
-        {
+      {
+          "label": "Message Received",
           "name": "messageReceived",
-          "maxWaitingTime": 300000,
-          "maxExpectedResponses": 1
-        }
-      ]
-    }
+          "description": "Callback from Leave Message function"
+      }
+  ],
+  "functions": [
+      {
+          "label": "Leave Message",
+          "name": "_leaveMessage",
+          "callbacks": [
+              {
+                  "name": "messageReceived",
+                  "maxWaitingTime": 300000,
+                  "maxExpectedResponses": 1
+              }
+          ]
+      }
   ]
 }
 ```
@@ -51,12 +50,14 @@ listen when our friend read and send us the response back.
 **scripts/helpers.js**
 
 ```js
-endpoint.leaveMessage = function(receiver, message, callback) {
+endpoint.leaveMessage = function (receiver, message, callback) {
   return endpoint._leaveMessage({
     receiver: receiver,
     message: message
-  }, {}, callback);
-}
+  }, {
+    messageReceived: callback
+  });
+};
 ```
 
 ### Endpoint
@@ -64,29 +65,32 @@ endpoint.leaveMessage = function(receiver, message, callback) {
 **endpoint.js**
 
 ```js
-endpoint.functions._leaveMessage = ({ params, id, userEmail }) => {
-  getResponse(userEmail, params.receiver, params.message);
-  return { sent: true };
-}
-
-getResponse = (sender, receiver, message) => {
+function getResponse (sender, receiver, message, callId) {
+  endpoint.appLogger.info(`Sending message [${message}] to [${receiver}]`);
   setTimeout(() => {
     let messageResponse = {
       receiver: sender,
       message: '🏃 Screw you!',
       sender: receiver
     };
-    endpoint.events.send('messageReceived', messageResponse, id);
+    endpoint.events.send('messageReceived', messageResponse, callId);
   }, 10000);
+}
+
+endpoint.functions._leaveMessage = ({ params, id, userEmail }) => {
+  if (!params.receiver || !params.message) {
+    throw 'Reicever and Message can\'t be empty';
+  }
+  getResponse(userEmail, params.receiver, params.message, id);
+  return { sent: true };
 }
 ```
 
 ## Try it in the Dynamic Console
 
 ```js
-let res = app.endpoints.proxy.leaveMessage('Saul Goodman', 'You owe me a bunch of money 💰', function (message) {
-  // This callback will run in another context
-  sys.logs.info(`Message received. Check response: `, message);
-});
+let res = app.endpoints.proxy.leaveMessage('Saul Goodman', 'You owe me money! 💰', function (event) {
+  sys.logs.info(`Message back from [${event.data.sender}] with content: [${event.data.message}]`)
+})
 log(JSON.stringify(res))
 ```
