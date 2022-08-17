@@ -4,23 +4,21 @@ endpoint.hooks.onEndpointStart = () => {
     endpoint.logger.info('Endpoint started');
 }
 
-endpoint.functions._makeCoffee = ({ params }) => {
-  let res = {};
-  switch (params.preference) {
-    case 'light':
-      res.coffee = '☕';
-      break;
-    case 'medium':
-      res.coffee = '☕☕';
-      break;
-    case 'dark':
-      res.coffee = '☕☕☕';
-      break;
-    default:
-      throw `There is no coffee [${params.preference}]`;
-  }
+function getResponse (sender, receiver, message, callId) {
+  endpoint.appLogger.info(`Sending message [${message}] to [${receiver}]`);
+  setTimeout(() => {
+    let messageResponse = {
+      receiver: sender,
+      message: '🏃 Screw you!',
+      sender: receiver
+    };
+    endpoint.events.send('messageReceived', messageResponse, callId);
+  }, 10000);
+}
 
-  return res;
+endpoint.functions._leaveMessage = ({ params, id, userEmail }) => {
+  getResponse(userEmail, params.receiver, params.message);
+  return { sent: true };
 }
 
 endpoint.start();

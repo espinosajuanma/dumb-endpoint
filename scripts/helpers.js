@@ -1,5 +1,6 @@
-endpoint.makeCoffee = function(preference) {
-  return endpoint._makeCoffee({
-    preference: preference
-  });
+endpoint.leaveMessage = function(receiver, message, callback) {
+  return endpoint._leaveMessage({
+    receiver: receiver,
+    message: message
+  }, {}, callback);
 }
