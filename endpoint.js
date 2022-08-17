@@ -3,7 +3,7 @@ const endpoint = require('slingr-endpoints');
 endpoint.hooks.onEndpointStart = async () => {
     endpoint.logger.info('Endpoint started');
 
-    setTimeout(() => {
+    setInterval(() => {
       endpoint.events.send('profile', {
         time: new Date().getTime(),
         memoryUsage: process.memoryUsage
