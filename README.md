@@ -47,6 +47,13 @@ What is out of scope:
 This repository has several branches named by numbers. To keep with the
 lesson just go to the next numbered branch in order.
 
+## Requisites
+
+- Install NodeJS
+  - At this day the platform use the `v16.16.0`
+- Make sure `npm` is installed too
+- Install `ngrok` for local development
+
 ## Getting Started
 
 We can write ourselves the code to run an endpoint. But to avoid a lot
