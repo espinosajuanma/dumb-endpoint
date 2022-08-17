@@ -1,19 +1,17 @@
 const endpoint = require('slingr-endpoints');
 
-endpoint.hooks.onEndpointStart = () => {
+endpoint.hooks.onEndpointStart = async () => {
     endpoint.logger.info('Endpoint started');
-}
 
-endpoint.functions._log = ({ params }) => {
-  let { level, message, additionalInfo } = params;
+    setTimeout(() => {
+      endpoint.events.send('profile', {
+        time: new Date().getTime(),
+        memoryUsage: process.memoryUsage
+      });
+    }, 15000);
 
-  // Internal logger
-  endpoint.logger[level](message, additionalInfo);
-
-  // App logger
-  endpoint.appLogger[level](message, additionalInfo);
-
-  return { level, message, additionalInfo }
+    let info = await endpoint.events.sendSync('getInfo', {});
+    endpoint.appLogger.info('Got info from app', info);
 }
 
 endpoint.start();

@@ -36,13 +36,19 @@
     },
     "status": "ACTIVE",
     "stores": [],
-    "events": [],
-    "functions": [
+    "events": [
         {
-            "label": "Logger",
-            "name": "_log"
+            "label": "Profile Endpoint",
+            "name": "profile",
+            "description": "Send report every X seconds about the memory usage"
+        },
+        {
+            "label": "Get Info From Endpoint",
+            "name": "getInfo",
+            "description": "Send an event to get info from the app"
         }
     ],
+    "functions": [],
     "scripts":[
         "helpers.js"
     ],

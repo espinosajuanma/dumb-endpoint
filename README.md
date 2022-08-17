@@ -1,10 +1,9 @@
-# Branch `004`
+# Branch `005`
 
-## Tell me why
+## What is going on here
 
-Sometimes we need to send some logs to the app. We need to use the
-`appLogger` library or just the `logger` if we just want to log
-something in the console.
+```js
+endpoint.events.send('eventName', {});
 
-> What is going on here?
-
+let info = await endpoint.events.sendSync('eventName', {});
+```
