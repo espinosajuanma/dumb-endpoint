@@ -1,20 +1,13 @@
-# Branch `003`
+# Branch `002`
 
-## Hey Dude! Call me back!
+## My secret is protected
 
-Callbacks are still a thing. When the Slingr App sends a request to the
-endpoint (call a function) it will wait a certain amount of time and
-then if the endpoint doesn't respond it will gave up and treat it like
-an error (Timeout).
+Configuration fields are useful to avoid hardcoded stuff or even pass
+secrets... In this case we are going to ask the endpoint to reveal a
+secret.
 
-If we have a heavy process that takes a lot to finish and you don't want
-to get a timeout error you can use callbacks which are a kind of event
-that are attached to a function call.
-
-In this example we are going to send a message to a friend with the
-helper `leaveMessage`. The endpoint should tell us that the message was
-sent, but we can't wait the response. So we need to set a callback to
-listen when our friend read and send us the response back.
+The secret will only be returned if we send the correct "password" or
+secret.
 
 ### Endpoint Descriptor
 
@@ -22,40 +15,38 @@ listen when our friend read and send us the response back.
 
 ```json
 {
-  "events": [
-      {
-          "label": "Message Received",
-          "name": "messageReceived",
-          "description": "Callback from Leave Message function"
-      }
-  ],
-  "functions": [
-      {
-          "label": "Leave Message",
-          "name": "_leaveMessage",
-          "callbacks": [
-              {
-                  "name": "messageReceived",
-                  "maxWaitingTime": 300000,
-                  "maxExpectedResponses": 1
-              }
-          ]
-      }
-  ]
+  "configuration": [
+        {
+            "name": "superSecretToken",
+            "label": "Super Secret Token",
+            "description": "A secret token to reveal the endpoint secrets",
+            "type": "text",
+            "required": true
+        }
+    ]
 }
 ```
 
-### 🤖 "I'll be back"
+## Local development - `.env`
+
+We can't set the value of this field in the Builder UI because the Proxy
+endpoint will not render the form.
+
+We have to use our `.env` environment file, and store the `superSecretToken`
+in a JSON format
+
+```
+_endpoint_config={"superSecretToken":"1234"}
+```
+
+### Helpers
 
 **scripts/helpers.js**
 
 ```js
-endpoint.leaveMessage = function (receiver, message, callback) {
-  return endpoint._leaveMessage({
-    receiver: receiver,
-    message: message
-  }, {
-    messageReceived: callback
+endpoint.revealSecret = function (secret) {
+  return endpoint._revealSecret({
+    secret: secret
   });
 };
 ```
@@ -65,32 +56,19 @@ endpoint.leaveMessage = function (receiver, message, callback) {
 **endpoint.js**
 
 ```js
-function getResponse (sender, receiver, message, callId) {
-  endpoint.appLogger.info(`Sending message [${message}] to [${receiver}]`);
-  setTimeout(() => {
-    let messageResponse = {
-      receiver: sender,
-      message: '🏃 Screw you!',
-      sender: receiver
-    };
-    endpoint.events.send('messageReceived', messageResponse, callId);
-  }, 10000);
-}
-
-endpoint.functions._leaveMessage = ({ params, id, userEmail }) => {
-  if (!params.receiver || !params.message) {
-    throw 'Reicever and Message can\'t be empty';
+endpoint.functions._revealSecret = ({ params }) => {
+  if (!params.secret) throw 'Secret can\'t be empty';
+  if (endpoint.endpointConfig.superSecretToken != params.secret) {
+    throw 'Wrong secret... You will never know my secret!';
   }
-  getResponse(userEmail, params.receiver, params.message, id);
-  return { sent: true };
+
+  return { secret: 'I sleep with the lights on' }
 }
 ```
 
 ## Try it in the Dynamic Console
 
 ```js
-let res = app.endpoints.proxy.leaveMessage('Saul Goodman', 'You owe me money! 💰', function (event) {
-  sys.logs.info(`Message back from [${event.data.sender}] with content: [${event.data.message}]`)
-})
+let res = app.endpoints.proxy.revealSecret(1234);
 log(JSON.stringify(res))
 ```

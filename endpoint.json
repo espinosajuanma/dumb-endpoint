@@ -36,28 +36,23 @@
     },
     "status": "ACTIVE",
     "stores": [],
-    "events": [
-        {
-            "label": "Message Received",
-            "name": "messageReceived",
-            "description": "Callback from Leave Message function"
-        }
-    ],
+    "events": [],
     "functions": [
         {
-            "label": "Leave Message",
-            "name": "_leaveMessage",
-            "callbacks": [
-                {
-                    "name": "messageReceived",
-                    "maxWaitingTime": 300000,
-                    "maxExpectedResponses": 1
-                }
-            ]
+            "label": "Reveal Secret",
+            "name": "_revealSecret"
         }
     ],
     "scripts":[
         "helpers.js"
     ],
-    "configuration": []
+    "configuration": [
+        {
+            "name": "superSecretToken",
+            "label": "Super Secret Token",
+            "description": "A secret token to reveal the endpoint secrets",
+            "type": "text",
+            "required": true
+        }
+    ]
 }

@@ -1,8 +1,5 @@
-endpoint.leaveMessage = function (receiver, message, callback) {
-  return endpoint._leaveMessage({
-    receiver: receiver,
-    message: message
-  }, {
-    messageReceived: callback
+endpoint.revealSecret = function (secret) {
+  return endpoint._revealSecret({
+    secret: secret
   });
 };

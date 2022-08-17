@@ -4,24 +4,13 @@ endpoint.hooks.onEndpointStart = () => {
     endpoint.logger.info('Endpoint started');
 }
 
-function getResponse (sender, receiver, message, callId) {
-  endpoint.appLogger.info(`Sending message [${message}] to [${receiver}]`);
-  setTimeout(() => {
-    let messageResponse = {
-      receiver: sender,
-      message: '🏃 Screw you!',
-      sender: receiver
-    };
-    endpoint.events.send('messageReceived', messageResponse, callId);
-  }, 10000);
-}
-
-endpoint.functions._leaveMessage = ({ params, id, userEmail }) => {
-  if (!params.receiver || !params.message) {
-    throw 'Reicever and Message can\'t be empty';
+endpoint.functions._revealSecret = ({ params }) => {
+  if (!params.secret) throw 'Secret can\'t be empty';
+  if (endpoint.endpointConfig.superSecretToken != params.secret) {
+    throw 'Wrong secret... You will never know my secret!';
   }
-  getResponse(userEmail, params.receiver, params.message, id);
-  return { sent: true };
+
+  return { secret: 'I sleep with the lights on' }
 }
 
 endpoint.start();
