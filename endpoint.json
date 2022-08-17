@@ -39,8 +39,8 @@
     "events": [],
     "functions": [
         {
-            "label": "Make Coffee",
-            "name": "_makeCoffee"
+            "label": "Logger",
+            "name": "_log"
         }
     ],
     "scripts":[

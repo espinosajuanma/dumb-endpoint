@@ -4,23 +4,16 @@ endpoint.hooks.onEndpointStart = () => {
     endpoint.logger.info('Endpoint started');
 }
 
-endpoint.functions._makeCoffee = ({ params }) => {
-  let res = {};
-  switch (params.preference) {
-    case 'light':
-      res.coffee = '☕';
-      break;
-    case 'medium':
-      res.coffee = '☕☕';
-      break;
-    case 'dark':
-      res.coffee = '☕☕☕';
-      break;
-    default:
-      throw `There is no coffee [${params.preference}]`;
-  }
+endpoint.functions._log = ({ params }) => {
+  let { level, message, additionalInfo } = params;
 
-  return res;
+  // Internal logger
+  endpoint.logger[level](message, additionalInfo);
+
+  // App logger
+  endpoint.appLogger[level](message, additionalInfo);
+
+  return { level, message, additionalInfo }
 }
 
 endpoint.start();
